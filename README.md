@@ -37,7 +37,7 @@
 
 3. Объединенный датасет (Data)
 
-Ссылка: https://disk.yandex.ru/d/b6Ie30qLnxGXnA
+Ссылка: https://disk.yandex.ru/d/Mep8flE-QMaIuw
 
 Кол-во категорий: 82
 
