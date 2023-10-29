@@ -18,14 +18,20 @@
 ### **Данные:**
 Данные собраны из двух готовых датасетов с животными
 1. Датасет 1
+
 Ссылка: https://www.kaggle.com/datasets/alessiocorrado99/animals10
+
 Кол-во категорий: 10
+
 Ср. кол-во изображений на категорию: ~2400
 
 
-2. Датасет 1
+2. Датасет 2
+   
 Ссылка: https://www.kaggle.com/datasets/antoreepjana/animals-detection-images-dataset
+
 Кол-во категорий: 30
+
 Ср. кол-во изображений на категорию: ~970
 
 
