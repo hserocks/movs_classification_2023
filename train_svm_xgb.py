@@ -1,6 +1,6 @@
-from resnet import prepare_data_resnet, train_resnet, test_resnet 
-from vit import prepare_data_vit, train_vit, test_vit
-from svm_xgb import train_svm, eval_svm, load_features, train_xgb, eval_xgb
+from utils.resnet import prepare_data_resnet, train_resnet, test_resnet 
+from utils.vit import prepare_data_vit, train_vit, test_vit
+from utils.svm_xgb import train_svm, eval_svm, load_features, train_xgb, eval_xgb
 import os
 
 from argparse import ArgumentParser

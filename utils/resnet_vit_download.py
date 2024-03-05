@@ -3,7 +3,7 @@ import gdown
 
 def get_rn_file():
 
-    dl_folder = 'download'
+    dl_folder = 'DL_dicts'
     file_path = 'resnet50_state_dict.pth' 
     full_path = os.path.join(dl_folder, file_path)
 
@@ -22,7 +22,7 @@ def get_rn_file():
 
 def get_vit_file():
 
-    dl_folder = 'download'
+    dl_folder = 'DL_dicts'
     file_path = 'vit_base_patch32_state_dict.pth'
     full_path = os.path.join(dl_folder, file_path)
 

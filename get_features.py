@@ -1,5 +1,5 @@
-from resnet import prepare_data_resnet, extract_features_resnet
-from vit import prepare_data_vit, extract_features_vit
+from utils.resnet import prepare_data_resnet, extract_features_resnet
+from utils.vit import prepare_data_vit, extract_features_vit
 
 from argparse import ArgumentParser
 

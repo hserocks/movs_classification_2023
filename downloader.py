@@ -2,6 +2,7 @@ import gdown
 import os
 import zipfile
 from argparse import ArgumentParser
+import shutil
 
 
 def download_rn_vit_features():
@@ -60,7 +61,8 @@ def download_SVM_XGB_models():
 def download_images():
     # Download images data and unzip
 
-    dl_folder = 'download'
+    dl_folder = '' # root folder
+    
     images_folder = '1-ReG67VFkiPBKNCkynvs7CWwIUqRVPFv'
     folder_name = 'Data_small.zip'
     output = os.path.join(dl_folder, folder_name)
@@ -72,11 +74,24 @@ def download_images():
 
     with zipfile.ZipFile(output, 'r') as zip_ref:
         zip_ref.extractall(unzip_folder)
+    
+    # Check and rearrange if there's a nested 'Data_small' folder
+    nested_folder = os.path.join(unzip_folder, 'Data_small')
+    if os.path.exists(nested_folder):
+        # Move all files from the nested folder to the intended directory
+        for filename in os.listdir(nested_folder):
+            shutil.move(os.path.join(nested_folder, filename), unzip_folder)
+        # Remove the now empty nested folder
+        os.rmdir(nested_folder)
 
 def download_images_HOG_SIFT():
     # Download images data and unzip (Data_small_normalized_adj)
 
     dl_folder = 'download'
+
+    # Create the folder if it doesn't already exist
+    if not os.path.exists(dl_folder):
+        os.makedirs(dl_folder)
 
     images_folder = '1-U7odUujdB5rG8gUguCs0aMt_wMwk4nt'
     folder_name = 'Data_small_normalized_adj.zip'

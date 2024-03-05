@@ -1,5 +1,5 @@
-from short_model import get_categories_vit, get_categories_rn
-from inference_svm_xgb import get_categories_SVM, get_categories_XGB
+from utils.short_model import get_categories_vit, get_categories_rn
+from utils.inference_svm_xgb import get_categories_SVM, get_categories_XGB
 from argparse import ArgumentParser
 
 import os

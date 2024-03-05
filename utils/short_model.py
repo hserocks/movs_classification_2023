@@ -1,8 +1,9 @@
 #pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 import json
-from resnet_vit_download import get_vit_file, get_rn_file
+from utils.resnet_vit_download import get_vit_file, get_rn_file
 import matplotlib.pyplot as plt
 import pandas as pd
+import os
 
 def get_categories_vit(new_image_path):
 
@@ -38,7 +39,12 @@ def get_categories_vit(new_image_path):
 
     # Then load the state dictionary
     get_vit_file() # download file if not exists
-    model.load_state_dict(torch.load('vit_base_patch32_state_dict.pth', map_location=device))
+
+    dl_folder = 'DL_dicts'
+    file_path = 'vit_base_patch32_state_dict.pth' 
+    full_path = os.path.join(dl_folder, file_path)
+
+    model.load_state_dict(torch.load(full_path, map_location=device))
 
    
     # Test the model on one image
@@ -142,7 +148,12 @@ def get_categories_rn(new_image_path):
 
     # Then load the state dictionary
     get_rn_file() # download file if not exists
-    resnet.load_state_dict(torch.load('resnet50_state_dict.pth', map_location=device))
+
+    dl_folder = 'DL_dicts'
+    file_path = 'resnet50_state_dict.pth' 
+    full_path = os.path.join(dl_folder, file_path)
+
+    resnet.load_state_dict(torch.load(full_path, map_location=device))
 
 
     # Move model to GPU

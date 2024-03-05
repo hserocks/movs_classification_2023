@@ -156,7 +156,7 @@ def train_resnet(device, no_of_classes, train_loader, test_loader):
 
     # Save the model's state dictionary
     folder = 'DL_dicts'
-    file = 'resnet50_state_dict_new.pth'
+    file = 'resnet50_state_dict.pth'
     full_path = os.path.join(folder, file)
 
     torch.save(resnet.state_dict(), full_path)
@@ -180,7 +180,7 @@ def test_resnet(no_of_classes, test_loader):
 
     # Then load the state dictionary
     folder = 'DL_dicts'
-    file = 'resnet50_state_dict_new.pth'
+    file = 'resnet50_state_dict.pth'
     full_path = os.path.join(folder, file)
 
     resnet.load_state_dict(torch.load(full_path, map_location=device))
