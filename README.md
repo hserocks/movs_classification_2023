@@ -56,21 +56,83 @@
 Ср. кол-во изображений на категорию: ~680
 
 ### **Модели:**
-Было обучено 4 варианта моделей:
+Было обучено 6 варианов моделей:
 
 1. SIFT SVC
 2. HOG SVC
 3. ResNet - ретренинг
 4. VIT - ретренинг (лучший результат)
+5. SVM и XGB на фичах ResNet
+6. SVM и XGB на фичах VIT
 
 ### **Телеграм бот:**
 Был сделан телеграм бот, определяющий класс пользовательского изображения животного с помощью моделей ResNet и VIT
 
 Бот задеплоен удаленно на DigitalOcean, работает здесь: @animal_guesser_bot
 
-**ВАЖНО**: код бота скопирован в этот репозиторий, однако полный бот (с файлами для моделей) лежит здесь:
+### **REPRODUCE CODE:**
+1. Clone repo and install packages
 
-https://github.com/kolyan1gg/test
+```python
+git clone https://github.com/hserocks/movs_classification_2023.git
+cd movs_classification_2023
+pip install -r requirements.txt
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121 # Install pytorch separately for CUDA to work. If non-Windows, see appropriate command here: https://pytorch.org/get-started/locally/
 
-Это связано с ограничениями гитхаба по объему файлов в репозитарии, в дальнейшем объединим в один
+```
 
+2. Get data
+
+```python
+python downloader.py --selection all 
+```
+
+3. Train ResNet / or VIT on our data (can skip and go to 4. to use downloaded weights)
+
+```python
+python train.py -- model resnet --path Data_small
+python train.py -- model vit --path Data_small
+```
+
+4. Evaluation of ResNet / VIT
+
+```python
+python train.py -- model resnet --path Data_small --eval True
+python train.py -- model VIT --path Data_small --eval True
+
+```
+
+5. Extract features from ResNet / VIT (can skip and go to 6. to use downloaded features)
+
+```python
+python get_features.py --model resnet
+python get_features.py --model vit
+```
+
+6. Train SVM and XGB on extracted features (can skip and go to 7. to use downloaded models)
+
+```python
+python train_svm_xgb.py --features resnet --model svm
+python train_svm_xgb.py --features resnet --model xgb
+python train_svm_xgb.py --features vit --model svm
+python train_svm_xgb.py --features vit --model xgb
+```
+
+7. Evaluate above 4 models
+
+```python
+python train_svm_xgb.py --features resnet --model svm --eval True
+python train_svm_xgb.py --features resnet --model xgb --eval True
+python train_svm_xgb.py --features vit --model svm --eval True
+python train_svm_xgb.py --features vit --model xgb --eval True
+```
+
+8. Inference
+```python
+# python inference.py --model {model_name} --path  {image_path}
+python inference.py --model resnet_svm --path  Deer.jpg
+python inference.py --model vit --path  Deer.jpg
+python inference.py --model resnet --path https://cdn.britannica.com/71/234471-050-093F4211/shiba-inu-dog-in-the-snow.jpg
+python inference.py --model vit_xgb --path https://cdn.britannica.com/71/234471-050-093F4211/shiba-inu-dog-in-the-snow.jpg
+
+```
