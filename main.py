@@ -52,7 +52,8 @@ app.include_router(role_adding_router)
 
 
 origins = [
-    "http://localhost:3000",
+    "http://localhost:3000", "http://178.128.171.95:3000",
+    "http://178.128.171.95:8000"
 ]
 
 app.add_middleware(

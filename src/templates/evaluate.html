@@ -33,8 +33,8 @@
                 <option value="vit">vit</option>
             </select>
             <button type="button" onclick="Evaluate()" style="margin-left: 10px;">Evaluate</button>
+            <div id="Evaluate_status"></div>
         </div>
-        <div id="evaluationResult"></div>
     </form>
 
     <form id="evalFormF" style="max-width: 600px; margin: 20px;">
@@ -54,7 +54,16 @@
             </select>
             <button type="button" onclick="EvaluateF()" style="margin-left: 10px;">Evaluate</button>
         </div>
-        <div id="evaluationResultF"></div>
+    </form>
+    
+    <form id="ResultsForm" style="max-width: 600px; margin: 20px;">
+        <h3>Results</h3>
+        <div style="margin-bottom: 15px;">
+            <label for="query" style="margin-right: 10px;">Enter task_id</label>
+            <input type="text" id="task_id" name="task_id" style="width: 300px;" placeholder="Task ID">
+            <button type="button" onclick="check_result()" style="margin-left: 10px;">Check!</button>
+        </div>
+        <div id="evaluationResult"></div>
     </form>    
     
 
@@ -73,6 +82,11 @@
     </div>
 
     <script>
+        // Retrieve task_id from localStorage
+        const task_id = localStorage.getItem('task_id');
+
+        // Set task_id as the placeholder for the input field
+        document.getElementById('task_id').value = task_id;
 
         document.addEventListener('DOMContentLoaded', () => {
             const loggedInUser = localStorage.getItem('loggedInUser');
@@ -107,11 +121,24 @@
             });
 
             const responseJson = await response.json();  // Extract JSON from the response
+            
+            if (responseJson.status === 'success' && responseJson.task_id) {
+                // Get the 'result' object
 
-            // Check if the response indicates success
-            if (responseJson.status === 'success' && responseJson.result) {
+                const task_id = responseJson.task_id;
+                localStorage.setItem('task_id', task_id);
+                document.getElementById('task_id').value = task_id;
+
+                const evaluationText = `<span style='color: green;'> Processing. Your task_id is ${task_id}</span>.`;
+                document.getElementById('evaluationResult').innerHTML = evaluationText;
+
+            }
+                // Check if the response indicates success
+            else if (responseJson.status === 'success' && responseJson.result) {
                 // Get the 'result' object
                 const result = responseJson.result;
+                
+    
 
                 // Start building the HTML table
                 let tableHTML = '<table><tr><th>Metric</th><th>Value</th></tr>';  // Header row
@@ -149,8 +176,62 @@
             });
 
             const responseJson = await response.json();  // Extract JSON from the response
+            
+            if (responseJson.status === 'success' && responseJson.task_id) {
+                // Get the 'result' object
 
-            // Check if the response indicates success
+                const task_id = responseJson.task_id;
+                localStorage.setItem('task_id', task_id);
+                document.getElementById('task_id').value = task_id;
+
+                const evaluationText = `<span style='color: green;'> Processing. Your task_id is ${task_id}</span>.`;
+                document.getElementById('evaluationResult').innerHTML = evaluationText;
+
+            }
+                // Check if the response indicates success
+            else if (responseJson.status === 'success' && responseJson.result) {
+                // Get the 'result' object
+                const result = responseJson.result;
+                
+    
+
+                // Start building the HTML table
+                let tableHTML = '<table><tr><th>Metric</th><th>Value</th></tr>';  // Header row
+
+                // Loop over each key-value pair in 'result' and add a row to the table for each
+                for (const [key, value] of Object.entries(result)) {
+                    tableHTML += `<tr><td>${key}</td><td>${value.toFixed(4)}</td></tr>`;  // Append row
+                }
+
+                tableHTML += '</table>';  // Close the table HTML
+                document.getElementById('evaluationResult').innerHTML = tableHTML;  // Set the table HTML
+
+            } else {
+                // Handle errors or different status
+                document.getElementById('evaluationResult').innerHTML = 'Failed to fetch evaluation data.';
+            }
+        }
+
+        async function check_result() {
+            const form = document.getElementById('ResultsForm');
+            const formData = new FormData(form);
+            const jsonData = Object.fromEntries(formData.entries());
+            const task_id = jsonData.task_id;
+
+            // Manually add other arguments here
+            //jsonData['data'] = 'Data_small';
+            //jsonData['evaluate_only'] = true;
+        
+            const response = await fetch(`/evaluate/result/${task_id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const responseJson = await response.json();  // Extract JSON from the response
+            
+                // Check if the response indicates success
             if (responseJson.status === 'success' && responseJson.result) {
                 // Get the 'result' object
                 const result = responseJson.result;
@@ -164,11 +245,15 @@
                 }
 
                 tableHTML += '</table>';  // Close the table HTML
-                document.getElementById('evaluationResultF').innerHTML = tableHTML;  // Set the table HTML
-
+                document.getElementById('evaluationResult').innerHTML = tableHTML;  // Set the table HTML
+            
+            } else if (responseJson.status === 'in progress'){
+                const evaluationText = `<span style='color: blue;'> Still processing. Your task_id is ${task_id}</span>.`;
+                document.getElementById('evaluationResult').innerHTML = evaluationText;
+            
             } else {
                 // Handle errors or different status
-                document.getElementById('evaluationResultF').innerHTML = 'Failed to fetch evaluation data.';
+                document.getElementById('evaluationResult').innerHTML = 'Failed to fetch evaluation data.';
             }
         }
 
