@@ -90,15 +90,15 @@ python downloader.py --selection all
 3. Train ResNet / or VIT on our data (can skip and go to 4. to use downloaded weights)
 
 ```python
-python train.py -- model resnet --path Data_small
-python train.py -- model vit --path Data_small
+python train.py --model resnet --path Data_small
+python train.py --model vit --path Data_small
 ```
 
 4. Evaluation of ResNet / VIT
 
 ```python
-python train.py -- model resnet --path Data_small --eval True
-python train.py -- model VIT --path Data_small --eval True
+python train.py --model resnet --path Data_small --eval True
+python train.py --model VIT --path Data_small --eval True
 
 ```
 

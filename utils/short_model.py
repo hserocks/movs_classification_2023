@@ -101,7 +101,7 @@ def get_categories_vit(new_image_path):
     df_string = df.to_string(index=False)
     print(df_string)
 
-    return df
+    return df_string # return df
 
 def get_categories_rn(new_image_path):
     import torch
@@ -192,7 +192,7 @@ def get_categories_rn(new_image_path):
     df_string = df.to_string(index=False)
     print(df_string)
 
-    return df
+    return df_string # return df
 
 def save_result_as_chart(result):   
     df = pd.DataFrame(result)

@@ -218,6 +218,14 @@ def test_resnet(no_of_classes, test_loader):
     print(f"Precision: {precision}")
     print(f"Recall: {recall}")
     print(f"F1 Score: {f1}")
+    
+    metrics_dict = {}
+    metrics_dict['accuracy'] = accuracy
+    metrics_dict['precision'] = precision
+    metrics_dict['recall'] = recall
+    metrics_dict['f1'] = f1
+    
+    return metrics_dict
 
 
 def extract_features_resnet(device, no_of_classes, dataloader):

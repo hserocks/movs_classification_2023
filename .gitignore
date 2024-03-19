@@ -5,3 +5,11 @@ features
 ML_models
 utils/__pycache__/
 venv
+.env
+.env-non-dev
+static/
+__pycache__/
+download/
+images/
+red_panda/
+scraped_images/

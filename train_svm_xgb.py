@@ -28,14 +28,17 @@ def main(features, model, eval):
             svm_pipeline, model_path, X_test, y_test = train_svm(X_train, X_test, y_train, y_test, model)
             print(f'Training completed, model saved here: {model_path}')
             print('Starting testing')
-            eval_svm(model_path, X_test, y_test)
+            metrics_dict = eval_svm(model_path, X_test, y_test)
             print('Complete')
+            return metrics_dict
+            
         elif model == 'xgb':
             model_path, X_test, y_test = train_xgb(X_train, X_test, y_train, y_test, model)
             print(f'Training completed, model saved here: {model_path}')
             print('Starting testing')
-            eval_xgb(model_path, X_test, y_test)
+            metrics_dict = eval_xgb(model_path, X_test, y_test)
             print('Complete')
+            return metrics_dict
     else:
         if model == 'svm':
             if features == 'resnet':
@@ -46,8 +49,9 @@ def main(features, model, eval):
             model_folder = 'ML_models'
             model_path = os.path.join(model_folder, file_name)
             print('Starting testing')
-            eval_svm(model_path, X_test, y_test)
+            metrics_dict = eval_svm(model_path, X_test, y_test)
             print('Complete')
+            return metrics_dict
 
         elif model == 'xgb':
             if features == 'resnet':
@@ -58,8 +62,9 @@ def main(features, model, eval):
             model_folder = 'ML_models'
             model_path = os.path.join(model_folder, file_name)
             print('Starting testing')
-            eval_xgb(model_path, X_test, y_test)
+            metrics_dict = eval_xgb(model_path, X_test, y_test)
             print('Complete')
+            return metrics_dict
         
 
 if __name__ == "__main__":

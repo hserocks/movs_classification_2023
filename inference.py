@@ -20,30 +20,38 @@ def main(model, path):
     if model == 'resnet':
         print('Selected model: ResNet50. Starting inference')
         image = open_image(path)
-        get_categories_rn(image)
+        return get_categories_rn(image)
  
     elif model == 'vit':
         print('Selected model: VIT. Starting inference')
         image = open_image(path)
-        get_categories_vit(image)
+        return get_categories_vit(image)
+    
     elif model == 'resnet_svm':
         print('Selected model: ResNet50 with SVM. Starting inference')
         image = open_image(path)
-        get_categories_SVM('resnet', image)
+        return get_categories_SVM('resnet', image)
+        
     elif model == 'vit_svm':
         print('Selected model: VIT with SVM. Starting inference')
         image = open_image(path)
-        get_categories_SVM('vit', image)
+        return get_categories_SVM('vit', image)
+        
     elif model == 'resnet_xgb':
         print('Selected model: ResNet50 with XGB. Starting inference')
         image = open_image(path)
-        get_categories_XGB('resnet', image)
+        return get_categories_XGB('resnet', image)
+        
     elif model == 'vit_xgb':
         print('Selected model: VIT with XGB. Starting inference')
         image = open_image(path)
-        get_categories_XGB('vit', image)
+        return get_categories_XGB('vit', image)
+        
     else:
         print('Invalid model name')
+        return 'Invalid model name'
+
+    #return output
 
 if __name__ == "__main__":
     parser = ArgumentParser()

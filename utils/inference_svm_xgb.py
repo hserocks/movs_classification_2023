@@ -62,6 +62,8 @@ def get_categories_SVM(feature_model, new_image_path):
     prediction = svm_model.predict(features)
     predicted_class_name = idx_to_class[prediction[0]]
     print(f'The model thinks it is: {predicted_class_name}')
+    
+    return predicted_class_name
 
 
 def get_categories_XGB(feature_model, new_image_path):
@@ -109,6 +111,8 @@ def get_categories_XGB(feature_model, new_image_path):
     df.sort_values(by='Probability', ascending=False, inplace=True)
     df_string = df.to_string(index=False)
     print(df_string)
+    
+    return df_string
 
 def image_to_features_resnet(new_image_path):
     weights = 'ResNet50_Weights.DEFAULT'

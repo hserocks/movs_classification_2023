@@ -76,6 +76,14 @@ def eval_svm(model_path, X_test, y_test):
     print(f"Precision: {precision*100:.2f}")
     print(f"Recall: {recall*100:.2f}")
     print(f"F1 Score: {f1*100:.2f}")
+    
+    metrics_dict = {}
+    metrics_dict['accuracy'] = accuracy
+    metrics_dict['precision'] = precision
+    metrics_dict['recall'] = recall
+    metrics_dict['f1'] = f1
+    
+    return metrics_dict
 
 
 
@@ -136,3 +144,9 @@ def eval_xgb(model_path, X_test, y_test):
 
     print(f"Test Accuracy: {accuracy*100:.2f}%")
     print(f"Test f1 score: {f1*100:.2f}%")
+    
+    metrics_dict = {}
+    metrics_dict['accuracy'] = accuracy
+    metrics_dict['f1'] = f1
+    
+    return metrics_dict

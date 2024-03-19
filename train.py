@@ -3,7 +3,7 @@ from utils.vit import prepare_data_vit, train_vit, test_vit
 
 from argparse import ArgumentParser
 
-def main(model, image_folder_path, eval):
+def main(model = 'vit', image_folder_path = 'Data_small', eval = False):
     if model == 'resnet':
         print('Selected model: ResNet50. Starting data preparation')
         device, no_of_classes, train_loader, test_loader, dataloader = prepare_data_resnet(image_folder_path)
@@ -13,7 +13,7 @@ def main(model, image_folder_path, eval):
             print('Training completed. Starting testing')
         else:
             print('Data prepared. Starting testing')
-        test_resnet(no_of_classes, test_loader)
+        return test_resnet(no_of_classes, test_loader)
 
     elif model == 'vit':
         print('Selected model: VIT. Starting data preparation')
@@ -24,9 +24,10 @@ def main(model, image_folder_path, eval):
             print('Training completed. Starting testing')
         else:
             print('Data prepared. Starting testing')
-        test_vit(no_of_classes, test_loader)
+        return test_vit(no_of_classes, test_loader)
     else:
         print('Invalid model name')
+        return 'Invalid model name'
 
 if __name__ == "__main__":
     parser = ArgumentParser()
