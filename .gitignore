@@ -13,3 +13,8 @@ download/
 images/
 red_panda/
 scraped_images/
+migrations/versions
+src/auth/__pycache__/
+src/evaluate/__pycache__/
+src/inference/__pycache__/
+dump.rdb
