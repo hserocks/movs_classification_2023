@@ -17,4 +17,6 @@ migrations/versions
 src/auth/__pycache__/
 src/evaluate/__pycache__/
 src/inference/__pycache__/
+src/operations/__pycache__/
+src/pages/__pycache__/
 dump.rdb
