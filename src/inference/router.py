@@ -28,30 +28,12 @@ from src.auth.models import User
 from src.auth.base_config import current_user
 
 
-# Add the original folder to sys.path
-# curr_dir = os.path.dirname(os.path.abspath(__file__))
-# parent_dir = os.path.dirname(curr_dir)
-#parent_dir = os.path.dirname(parent_dir)
-
-# original_folder = Path(__file__).resolve().parents[1]
-# sys.path.append(str(parent_dir))
-# print('original_folder:', original_folder)  # temp
-
 from inference import main as inference_main
 from utils.gimages_dl import download_gimages, get_random_gimage
 from random import choice
 from shutil import copyfile
 
-'''
-import importlib
-parent_dir = str(Path(__file__).resolve().parents[2])
-if parent_dir not in sys.path:
-    sys.path.append(parent_dir)
 
-module_name = "inference"  # Change to the name of your module
-module = importlib.import_module(module_name)
-inference_main = getattr(module, 'main', None)
-'''
 
 
 animal_list = ['Bear', 'Brown bear', 'Bull', 'Camel', 'Canary', 'Cat',
@@ -83,16 +65,6 @@ router = APIRouter(
     prefix="/inference",
     tags=["Inference"]
 )
-
-#current_user = fastapi_users.current_user()
-
-@router.get("/long_operation")
-@cache(expire=30)
-def get_long_op():
-    time.sleep(2)
-    return "Много много данных, которые вычислялись сто лет"
-
-
 
 
 @cache(expire=30)
@@ -234,18 +206,6 @@ async def upload_image(request: Request, file: UploadFile = File(...)):
     return {"status": "success", "link": file_path, "link_static": static_file_path}
 
 
-# @router.get("/database", response_model=List[InferenceCreate])
-# async def get_data(session: AsyncSession = Depends(get_async_session)):
-#     # Execute the query
-#     async with session.begin():
-#         result = await session.execute(select(inference_table))
-#         db_items = result.scalars().all()
-
-#     # Convert database objects to Pydantic model instances
-#     data_items = [InferenceCreate() for item in db_items]
-    
-#     return db_items
-
 
 @router.get("/database")
 async def get_database_data(
@@ -280,12 +240,4 @@ async def get_database_data(
             "data": None,
             "details": str(e)  # Providing exception details can help in debugging
         })
-
-
-@router.get("/main")
-async def main(session: AsyncSession = Depends(get_async_session)):
-    result = await session.execute(select(1))
-    return result.all()
-
-
 

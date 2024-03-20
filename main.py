@@ -10,7 +10,6 @@ from src.auth.schemas import UserCreate, UserRead
 from src.config import REDIS_HOST, REDIS_PORT
 from src.operations.router import router as router_operation
 from src.auth.router import router as role_adding_router
-from src.tasks.router import router as router_tasks
 from src.pages.router import router as router_pages
 
 from src.inference.router import router as router_inference # NEW!!!
@@ -44,7 +43,6 @@ app.include_router(router_inference) # NEW!!!
 app.include_router(router_evaluate) # NEW!!!
 
 
-app.include_router(router_tasks)
 app.include_router(router_pages)
 app.include_router(role_adding_router)
 

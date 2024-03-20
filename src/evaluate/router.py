@@ -35,44 +35,6 @@ celery = Celery('evaluate',
                 worker_pool=aio_pool.pool.AsyncIOPool)
 
 
-'''
-@router.post("")
-async def evaluate(new_operation: ModelEvaluate, session: AsyncSession = Depends(get_async_session)):
-    from datetime import datetime
-    timestamp = datetime.now().astimezone(pytz.utc).replace(tzinfo=None)
-    
-    stmt = insert(evaluate_table).values(
-        **new_operation.model_dump(),
-        date=timestamp
-    )
-    
-    await session.execute(stmt)
-    await session.commit()
-    
-    #output = await cached_evaluate(new_operation.model, new_operation.data, new_operation.evaluate_only)
-    output = cached_evaluate.delay(new_operation.model, new_operation.data, new_operation.evaluate_only)
-    
-    return {"status": "success", "result": output}
-
-@celery.task
-def cached_evaluate(model: str, data: str, eval_only: bool):
-    return cached_evaluate2(model, data, eval_only)
-
-@cache(expire=900)
-def cached_evaluate2(model: str, data: str, eval_only: bool):
-    return train_main(model, data, eval_only)
-'''
-
-@router.get("/celery_test")
-def test():
-    test_task.delay()
-
-@celery.task
-def test_task():
-    print("Hello from Celery!")
-    return('Hello from Celery!')
-    
-
 
 @router.post("")
 async def evaluate(new_operation: ModelEvaluate, session: AsyncSession = Depends(get_async_session)):
@@ -99,8 +61,6 @@ async def evaluate(new_operation: ModelEvaluate, session: AsyncSession = Depends
 
 @celery.task
 def cached_evaluate(model: str, data: str, eval_only: bool):
-    #print('wtf')
-    #return 'wtf'
     return train_main(model, data, eval_only)
 
 
@@ -118,9 +78,6 @@ async def get_task_result(task_id: str):
     if not is_ready:
         raise HTTPException(status_code=202, detail="Task is still processing")
 
-    # Retrieve task result asynchronously using run_in_threadpool
-    #result = await run_in_threadpool(task.get, timeout=10)  # Adjust the timeout as necessary
-    #result = task.get
     try:
         result = await run_in_threadpool(task.get, timeout=5)
     except Exception as e:
@@ -147,14 +104,9 @@ async def evaluate(new_operation: FeatureModelEvaluate, session: AsyncSession = 
     
     # Dispatch the background task without waiting for the result
     task = cached_evaluate_fmodels.delay(new_operation.features, new_operation.fmodel, new_operation.evaluate_only)
-    #task = cached_evaluate.delay('a', 'b', 'c')
     
     return {"status": "success", "task_id": task.id}  # Return a task ID or similar identifier
 
 @celery.task
 def cached_evaluate_fmodels(features: str, fmodel: str, eval_only: bool):
     return train_svm_xgb(features, fmodel, eval_only)
-
-# @cache(expire=900)
-# def cached_evaluate_fmodel2(features: str, fmodel: str, eval_only: bool):
-#     return train_svm_xgb(features, fmodel, eval_only)
