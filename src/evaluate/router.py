@@ -34,6 +34,12 @@ celery = Celery('evaluate',
                 backend=f'redis://{REDIS_HOST}:{REDIS_PORT}', 
                 worker_pool=aio_pool.pool.AsyncIOPool)
 
+# TEMP FOR TESTING
+# celery = Celery('evaluate', 
+#                 broker=f'redis://{REDIS_HOST}:{REDIS_PORT}',
+#                 backend=f'redis://{REDIS_HOST}:{REDIS_PORT}', 
+#                 )
+# TEMP FOR TESTING
 
 
 @router.post("")

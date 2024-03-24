@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel, validator, AwareDatetime, constr, Field
+from pydantic import BaseModel, validator, constr, Field
 import pytz
 from dateutil import parser # python-dateutil
 

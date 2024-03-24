@@ -20,6 +20,23 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
+# TEMP NEW
+# from docker.postgres_test import create_conn_main
+# import asyncio
+# engine = asyncio.run(create_conn_main())
+# TEMP NEW
+
+# TEMP NEW
+from src.config import  DB_HOST, DB_PORT,DB_NAME, DB_USER, DB_PASS
+from sqlalchemy import create_engine, text
+engine = create_engine(f'postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}')
+sql = text("INSERT INTO role (id, name, permissions) VALUES (1, 0, NULL) ON CONFLICT (id) DO NOTHING;")
+with engine.connect() as conn:
+    conn.execute(sql)
+    conn.commit()  # Make sure to commit the transaction
+# TEMP NEW
+
+
 app = FastAPI(
     title="Image classifier!"
 )

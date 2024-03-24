@@ -1,20 +1,32 @@
+#version: "3.7"
 version: "3.11.8"
 services:
   db:
     image: postgres:15
+    restart: always
     container_name: db_app
     command: -p 1221
     expose:
       - 1221
     env_file:
       - .env-non-dev
+    networks:
+      - my_network
+    shm_size: 8g
+
 
   redis:
-    image: redis:7
+    #image: redis:7
+    image: redis:latest
     container_name: redis_app
     command: --port 5370
     expose:
       - 5370
+    networks:
+      - my_network
+    shm_size: 8g
+
+
 
   app:
     build:
@@ -22,12 +34,17 @@ services:
     env_file:
       - .env-non-dev
     container_name: fastapi_app
+    # entrypoint: ["/fastapi_app/docker/postgres.sh"]
     command: ["/fastapi_app/docker/app.sh"]
     ports:
       - 9999:8000
     depends_on:
       - db
       - redis
+    networks:
+      - my_network
+    shm_size: 8g
+
 
   celery:
     build:
@@ -38,6 +55,10 @@ services:
     command: ["/fastapi_app/docker/celery.sh", "celery"]
     depends_on:
       - redis
+    networks:
+      - my_network
+    shm_size: 8g
+
 
   flower:
     build:
@@ -51,3 +72,23 @@ services:
       - celery
     ports:
       - 8888:5555
+    networks:
+      - my_network
+    shm_size: 8g
+  # alembic:
+  #   build:
+  #     context: .
+  #   env_file:
+  #     - .env-non-dev
+  #   container_name: alembic_app
+  #   command: ["alembic", "upgrade", "head"]
+  #   depends_on:
+  #     - db
+  #   # Optionally, use the 'entrypoint' to override the default command
+  #   # entrypoint: /bin/sh -c
+  #   # Restart policies can be 'no', 'always', 'on-failure', or 'unless-stopped'
+  #   restart: on-failure
+
+networks:
+  my_network:
+    driver: bridge

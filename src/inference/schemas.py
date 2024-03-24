@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel, validator, AwareDatetime, constr, Field
+from pydantic import BaseModel, validator, constr, Field
 import pytz
 from dateutil import parser # python-dateutil
 
@@ -29,7 +29,7 @@ class InferenceCreate(BaseModel):
     
     class Config:
         from_attributes=True
-        allow_population_by_field_name = True
+        populate_by_name  = True
 
 
     # Custom validator for the 'model' field
@@ -55,7 +55,7 @@ class InferenceGimages(BaseModel):
     
     class Config:
         from_attributes=True
-        allow_population_by_field_name = True
+        populate_by_name  = True
 
 
     # Custom validator for the 'model' field
