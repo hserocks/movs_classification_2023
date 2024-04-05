@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Model Inference and Authentication</title>
+    <style>
+        .top-right-buttons {
+            position: fixed; /* or 'absolute' */
+            top: 10px;
+            right: 20px;
+        }
+        .top-right-buttons button {
+            margin-left: 10px;
+        }
+        .top-right-info {
+            position: fixed;
+            top: 30px;
+            right: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Submit a search query and infer</h2>
+    <form id="inferenceFormG" style="max-width: 600px; margin: 20px;">
+
+        <div style="margin-bottom: 15px;">
+            <label for="model" style="margin-right: 10px;">Select a model:</label>
+            <select name="model" id="model" style="width: 150px;">
+                <option value="resnet">resnet</option>
+                <option value="vit">vit</option>
+                <option value="resnet_svm">resnet_svm</option>
+                <option value="vit_svm">vit_svm</option>
+                <option value="resnet_xgb">resnet_xgb</option>
+                <option value="vit_xgb">vit_xgb</option>
+            </select>
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <label for="query" style="margin-right: 10px;">Enter search query</label>
+            <input type="text" id="query" name="query" style="width: 300px;">
+            <button type="button" onclick="submitInferenceG()" style="margin-left: 10px;">Go!</button>
+        </div>
+        
+    </form>
+
+
+    <div id="response"></div>
+    <img id="outputImage" style="max-width:400px;"/><br>
+
+
+    <div class="top-right-buttons">
+        <button onclick="window.location.href='/pages/home';">Login page</button>
+        <button onclick="window.location.href='/pages/infer';">Inference</button>
+        <button onclick="window.location.href='/pages/infer_google';">Inference GImages</button>
+        <button onclick="window.location.href='/pages/eval';">Evaluate</button>
+        <button onclick="window.location.href='/pages/stats';">History</button>
+        <!-- Placeholder for logout button; initially hidden -->
+        <span id="logoutButtonPlaceholder"></span>
+    </div>
+
+    <div class="top-right-info">
+        <span id="loggedInAs"></span>
+    </div>
+
+    <script>
+        let image_link = "";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            const logoutButtonPlaceholder = document.getElementById('logoutButtonPlaceholder');
+        
+            if (loggedInUser) {
+                // User is logged in, display logout button and "Logged in as" message
+                document.getElementById('loggedInAs').innerHTML = `Logged in as: ${loggedInUser}`;
+                logoutButtonPlaceholder.innerHTML = `<button onclick="logout()">Logout</button>`;
+            } else {
+                // User is not logged in, do not display logout button
+                logoutButtonPlaceholder.innerHTML = '';
+                document.getElementById('loggedInAs').innerHTML = '';
+            }
+        });
+
+        async function submitInferenceG() {
+            const form = document.getElementById('inferenceFormG');
+            const formData = new FormData(form);
+            const jsonData = Object.fromEntries(formData.entries());
+        
+            const response = await fetch('/inference/gimages', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonData),
+            });
+
+            if (response.status === 401) {  // Check if the status code is 401 Unauthorized
+                // Display 'Not logged in!' in red
+                document.getElementById('response').innerHTML = '<span style="color: red;">Not logged in!</span>';
+                return;  // Exit the function early since there's no valid response to process
+            }
+        
+            const result = await response.json();
+            let outputHTML = '<b>Result:</b><br>';  // Starting HTML with Result heading
+            
+            // Check if the inference result is likely a table or a single word
+            if (result.inference.includes('\n') || result.inference.includes(' ')) {  
+                // Split the response into lines for table format
+                const lines = result.inference.split('\n');
+                let tableHTML = '<table>';  // Start building the HTML table without explicit header rows
+        
+                lines.forEach(line => {
+                    const parts = line.trim().split(/\s+/);  // Split on whitespace
+                    if (parts.length >= 2) {
+                        const category = parts.slice(0, -1).join(' '); // Category might be words separated by spaces
+                        const probability = parts[parts.length - 1]; // Probability is assumed to be the last part
+                        tableHTML += `<tr><td>${category}</td><td>${probability}</td></tr>`;
+                    }
+                });
+        
+                tableHTML += '</table>';  // Close the table HTML
+                outputHTML += tableHTML;  // Append table to output HTML
+            } else {
+                // Inference result is a single word, display it in a sentence
+                outputHTML += `The model thinks it is a ${result.inference}.`;
+            }
+        
+            // Set the innerHTML of the response container to the outputHTML
+            document.getElementById('response').innerHTML = outputHTML;
+        
+            // Update image as before
+            // const finalImageLink = image_link || formData.get('link_static');
+            document.getElementById('outputImage').src = result.link_static;
+        }
+
+
+        async function logout() {
+            //const responseArea = document.getElementById('logoutResponse');  // This is where we'll display the message
+        
+            const response = await fetch('/auth/logout', {
+                method: 'POST',
+                credentials: 'include',  // Needed for clearing cookie
+            });
+        
+            if (response.ok) {  // .ok is true for status codes 200-299
+                //responseArea.innerHTML = "<span style='color: green;'>Logged Out!</span>";
+                localStorage.removeItem('loggedInUser');  // Clear the username from localStorage
+                document.getElementById('loggedInAs').innerHTML = "";  // Clear the logged in message
+                window.location.href = '/pages/home';  // Redirect to the home page
+            } else {
+                //responseArea.innerHTML = "<span style='color: red;'>Error!</span>";
+            }
+        }
+
+        
+    </script>
+</body>
+</html>

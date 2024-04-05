@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Model Inference and Authentication</title>
+    <style>
+        .top-right-buttons {
+            position: fixed; /* or 'absolute' */
+            top: 10px;
+            right: 20px;
+        }
+        .top-right-buttons button {
+            margin-left: 10px;
+        }
+        .top-right-info {
+            position: fixed;
+            top: 30px;
+            right: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+
+    <h2>View previous inference requests</h2>
+    <label for="outputValue">Enter animal category:</label>
+    <input type="text" id="outputValue" name="output" value = "Dog"><br><br>
+    <button onclick="fetchData()">Get Data</button>
+    <div id="dataTable"></div>
+
+    <div class="top-right-buttons">
+        <button onclick="window.location.href='/pages/home';">Login page</button>
+        <button onclick="window.location.href='/pages/infer';">Inference</button>
+        <button onclick="window.location.href='/pages/infer_google';">Inference GImages</button>
+        <button onclick="window.location.href='/pages/eval';">Evaluate</button>
+        <button onclick="window.location.href='/pages/stats';">History</button>
+        <!-- Placeholder for logout button; initially hidden -->
+        <span id="logoutButtonPlaceholder"></span>
+    </div>
+
+    <div class="top-right-info">
+        <span id="loggedInAs"></span>
+    </div>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            const logoutButtonPlaceholder = document.getElementById('logoutButtonPlaceholder');
+        
+            if (loggedInUser) {
+                // User is logged in, display logout button and "Logged in as" message
+                document.getElementById('loggedInAs').innerHTML = `Logged in as: ${loggedInUser}`;
+                logoutButtonPlaceholder.innerHTML = `<button onclick="logout()">Logout</button>`;
+            } else {
+                // User is not logged in, do not display logout button
+                logoutButtonPlaceholder.innerHTML = '';
+                document.getElementById('loggedInAs').innerHTML = '';
+            }
+        });
+
+        async function fetchData() {
+            const output = document.getElementById('outputValue').value;
+            const response = await fetch(`/inference/database?output=${output}`);
+            const { status, data } = await response.json();
+
+            if (status === 'success') {
+                const table = document.createElement('table');
+                table.style.width = '100%';
+                table.setAttribute('border', '1');
+                
+                // Create header row
+                const headerRow = document.createElement('tr');
+                if (data.length > 0) {
+                    Object.keys(data[0]).forEach(key => {
+                        const headerCell = document.createElement('th');
+                        headerCell.textContent = key;
+                        headerRow.appendChild(headerCell);
+                    });
+                }
+                table.appendChild(headerRow);
+
+                // Create data rows
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    Object.values(item).forEach(value => {
+                        const cell = document.createElement('td');
+                        cell.textContent = value || 'N/A';  // Replace null with 'N/A'
+                        row.appendChild(cell);
+                    });
+                    table.appendChild(row);
+                });
+
+                // Clear old table and append new table
+                const dataTable = document.getElementById('dataTable');
+                dataTable.innerHTML = '';  // Clear previous results
+                dataTable.appendChild(table);
+            } else {
+                document.getElementById('dataTable').innerHTML = 'Failed to fetch data.';
+            }
+        }
+
+        async function logout() {
+            //const responseArea = document.getElementById('logoutResponse');  // This is where we'll display the message
+        
+            const response = await fetch('/auth/logout', {
+                method: 'POST',
+                credentials: 'include',  // Needed for clearing cookie
+            });
+        
+            if (response.ok) {  // .ok is true for status codes 200-299
+                //responseArea.innerHTML = "<span style='color: green;'>Logged Out!</span>";
+                localStorage.removeItem('loggedInUser');  // Clear the username from localStorage
+                document.getElementById('loggedInAs').innerHTML = "";  // Clear the logged in message
+                window.location.href = '/pages/home';  // Redirect to the home page
+            } else {
+                //responseArea.innerHTML = "<span style='color: red;'>Error!</span>";
+            }
+        }
+
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Model Inference and Authentication</title>
+    <style>
+        .top-right-buttons {
+            position: fixed; /* or 'absolute' */
+            top: 10px;
+            right: 20px;
+        }
+        .top-right-buttons button {
+            margin-left: 10px;
+        }
+        .top-right-info {
+            position: fixed;
+            top: 30px;
+            right: 20px;
+            margin-top: 20px;
+        }
+    </style>
+
+</head>
+<body>
+    <h2>Register</h2>
+    <form id="registerForm">
+        Email: <input type="text" name="email"><br>
+        Username: <input type="text" name="username"><br>
+        Password: <input type="password" name="password"><br>
+        <!--  Role: <input type="text" name="role_id" value="0" readonly><br> -->
+        <button type="button" onclick="register()">Register</button> 
+    </form>
+    <div id="registerResponse"></div>  <!-- New element for displaying register response -->
+
+
+    <h2>Login</h2>
+    <form id="loginForm">
+        Email: <input type="text" name="username"><br>
+        Password: <input type="password" name="password"><br>
+        <button type="button" onclick="login()">Login</button>
+    </form>
+
+    <div id="loginResponse"></div>  <!-- New element for displaying login response -->
+
+    <h2>Logout</h2>
+    <button onclick="logout()">Logout</button>
+    <div id="logoutResponse"></div>  <!-- New element for displaying logout response -->
+
+
+    <div class="top-right-buttons">
+        <button onclick="window.location.href='/pages/home';">Login page</button>
+        <button onclick="window.location.href='/pages/infer';">Inference</button>
+        <button onclick="window.location.href='/pages/infer_google';">Inference GImages</button>
+        <button onclick="window.location.href='/pages/eval';">Evaluate</button>
+        <button onclick="window.location.href='/pages/stats';">History</button>
+        <!-- Placeholder for logout button; initially hidden -->
+        <span id="logoutButtonPlaceholder"></span>
+    </div>
+    
+    <div class="top-right-info">
+        <span id="loggedInAs"></span>
+    </div>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            const logoutButtonPlaceholder = document.getElementById('logoutButtonPlaceholder');
+        
+            if (loggedInUser) {
+                // User is logged in, display logout button and "Logged in as" message
+                document.getElementById('loggedInAs').innerHTML = `Logged in as: ${loggedInUser}`;
+                logoutButtonPlaceholder.innerHTML = `<button onclick="logout()">Logout</button>`;
+            } else {
+                // User is not logged in, do not display logout button
+                logoutButtonPlaceholder.innerHTML = '';
+                document.getElementById('loggedInAs').innerHTML = '';
+            }
+        });
+
+        async function register() {
+            const form = document.getElementById('registerForm');
+            const formData = new FormData(form);
+            const jsonData = Object.fromEntries(formData.entries());
+            const responseArea = document.getElementById('registerResponse'); // Where we'll display the message
+
+            jsonData['role_id'] = 0;
+
+
+            const response = await fetch('/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonData),
+            });
+
+            const result = await response.json(); // Assuming the response is always JSON
+
+            if (response.ok) {
+                responseArea.innerHTML = "<span style='color: green;'>Registered!</span>";
+            } else {
+                // Use result.detail for the error message, or a default error message if detail is not available
+                responseArea.innerHTML = `<span style='color: red;'>${result.detail || 'Error!'}</span>`;
+            }
+        }
+
+        async function login() {
+            const form = document.getElementById('loginForm');
+            const formData = new FormData(form);
+            const formBody = new URLSearchParams(formData).toString();
+            const responseArea = document.getElementById('loginResponse');  // This is where we'll display the message
+            const username = formData.get('username'); // Get the username from the form data
+        
+            const response = await fetch('/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                credentials: 'include',  // Needed for setting cookie
+                body: formBody,
+            });
+        
+            if (response.ok) {  // .ok is true for status codes 200-299
+                responseArea.innerHTML = "<span style='color: green;'>Logged In!</span>";
+                const username = formData.get('username');
+                localStorage.setItem('loggedInUser', username);  // Store the username in localStorage
+                document.getElementById('loggedInAs').innerHTML = `Logged in as: ${username}`;
+            } else {
+                responseArea.innerHTML = "<span style='color: red;'>Login Error!</span>";
+            }
+        }
+
+        async function logout() {
+            const responseArea = document.getElementById('logoutResponse');  // This is where we'll display the message
+        
+            const response = await fetch('/auth/logout', {
+                method: 'POST',
+                credentials: 'include',  // Needed for clearing cookie
+            });
+        
+            if (response.ok) {  // .ok is true for status codes 200-299
+                responseArea.innerHTML = "<span style='color: green;'>Logged Out!</span>";
+                localStorage.removeItem('loggedInUser');  // Clear the username from localStorage
+                document.getElementById('loggedInAs').innerHTML = "";  // Clear the logged in message
+                window.location.href = '/pages/home';  // Redirect to the home page
+            } else {
+                responseArea.innerHTML = "<span style='color: red;'>Error!</span>";
+            }
+        }
+
+        
+    </script>
+</body>
+</html>
