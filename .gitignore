@@ -21,3 +21,5 @@ src/operations/__pycache__/
 src/pages/__pycache__/
 dump.rdb
 venv
+.bot_env
+*:Zone.Identifier
