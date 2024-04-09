@@ -1,3 +1,5 @@
+# work in progress
+'''
 import openai
 import logging
 from config_reader import config
@@ -14,7 +16,8 @@ async def generate_text(prompt) -> dict:
                 {"role": "user", "content": prompt}
             ]
         )
-        return response['choices'][0]['message']['content'], response['usage']['total_tokens']
+        return response['choices'][0]['message']['content'], \
+               response['usage']['total_tokens']
     except Exception as e:
         logging.error(e)
 
@@ -34,3 +37,4 @@ async def generate_image(prompt, n=1, size="1024x1024") -> list[str]:
         return []
     else:
         return urls
+'''

@@ -5,10 +5,10 @@ import logging
 from datetime import datetime
 from random import randint, choice
 
-from config_reader import config
-from short_model import (get_categories_rn, get_categories_vit,
-                         save_result_as_chart)
-from gimages_dl import download_gimages, get_random_gimage
+from bot_telegram_up.config_reader import config
+from utils.short_model import (get_categories_rn, get_categories_vit,
+                               save_result_as_chart)
+from utils.gimages_dl import download_gimages, get_random_gimage
 
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.types import Message, FSInputFile
@@ -197,7 +197,8 @@ async def callbacks_num(callback: types.CallbackQuery):
         # получение ответа и передача пользователю
         if user_value == "RESNET":
 
-            full_answer = get_categories_rn(new_images[-1])
+            full_answer_string = get_categories_rn(new_images[-1])
+            full_answer = string_to_df(full_answer_string)
             short_answer = full_answer['Category ID'][0]
             image_to_send = FSInputFile(save_result_as_chart(full_answer))
 
@@ -229,7 +230,9 @@ async def callbacks_num(callback: types.CallbackQuery):
         # и передача пользователю
         elif user_value == "VIT":
 
-            full_answer = get_categories_vit(new_images[-1])
+            full_answer_string = get_categories_vit(new_images[-1])
+            full_answer = string_to_df(full_answer_string)
+
             short_answer = full_answer['Category ID'][0]
             image_to_send = FSInputFile(save_result_as_chart(full_answer))
 
@@ -308,6 +311,24 @@ async def analyze_random_image(message: Message, command: CommandObject):
     await bot.send_photo(message.chat.id, image_to_send)
     await message.answer("Выберите модель: -",
                          reply_markup=model_keyboard())
+
+
+def string_to_df(df_string):
+    import pandas as pd
+    import re
+
+    columns = ['Category ID', 'Probability']
+    lines = df_string.strip().split('\n')[1:]
+
+    data = []
+    for line in lines:
+        match = re.match(r"([a-zA-Z\s]+)([0-9.]+)", line.strip())
+        if match:
+            items = match.groups()
+            data.append([items[0].strip(), float(items[1])])
+
+    df_converted = pd.DataFrame(data, columns=columns)
+    return df_converted
 
 
 # Запуск процесса поллинга новых апдейтов

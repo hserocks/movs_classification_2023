@@ -98,7 +98,7 @@ python train.py --model vit --path Data_small
 
 ```python
 python train.py --model resnet --path Data_small --eval True
-python train.py --model VIT --path Data_small --eval True
+python train.py --model vit --path Data_small --eval True
 
 ```
 
