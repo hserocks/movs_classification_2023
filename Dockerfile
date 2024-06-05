@@ -33,4 +33,4 @@ RUN chmod a+x docker/*.sh
 # Start the bot and the FastAPI app
 # CMD ["sh", "-c", "nohup python bot_new.py > /dev/null 2>&1 & exec gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind=0.0.0.0:8000"]
 
-ENTRYPOINT ["/fastapi_app/start.sh"]
+ENTRYPOINT ["docker/start.sh"]
