@@ -10,7 +10,8 @@ DB_HOST="db"
 DB_PORT="5432"
 DB_NAME="postgres"
 DB_USER="postgres"
-DB_PASS="postgres"
+# DB_PASS="postgres"
+DB_PASS="GWtfrb12!"
 
 PGPASSWORD=$DB_PASS psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -c "INSERT INTO role (id, column1, column2) VALUES (1, 'gg', 'gg') ON CONFLICT (id) DO NOTHING;"
 
