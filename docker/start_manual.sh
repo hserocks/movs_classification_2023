@@ -18,9 +18,6 @@ sudo service redis-server start
 echo "Activating virtual environment..."
 source .venv/bin/activate
 
-# Run PostgreSQL command (if needed to set custom port)
-sudo -u postgres psql -c "ALTER SYSTEM SET port = 1221;"
-sudo service postgresql restart
 
 # Check if PostgreSQL is running
 echo "Checking if PostgreSQL is running..."
