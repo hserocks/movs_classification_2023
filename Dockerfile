@@ -18,6 +18,9 @@ COPY . .
 
 RUN chmod a+x docker/*.sh
 
+# Run bot_new.py in the background
+RUN nohup python bot_new.py > /dev/null 2>&1 &
+
 # Install dockerize
 # ENV DOCKERIZE_VERSION v0.6.1
 # RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
