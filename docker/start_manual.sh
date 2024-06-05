@@ -1,5 +1,7 @@
 #!/bin/bash
 
+RUN chmod a+x docker/*.sh
+
 # Load environment variables
 source .env-non-dev
 
