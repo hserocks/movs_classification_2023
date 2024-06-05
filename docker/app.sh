@@ -5,7 +5,8 @@ alembic upgrade head
 
 # add role = 1
 
-DB_HOST="db"
+#DB_HOST="db"
+DB_HOST="localhost"
 #DB_PORT="1221"
 DB_PORT="5432"
 DB_NAME="postgres"
