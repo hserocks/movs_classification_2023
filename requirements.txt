@@ -81,7 +81,7 @@ prompt-toolkit==3.0.43
 pwdlib==0.2.0
 pycparser==2.21
 pydantic==2.5.3
-pydantic_core==2.16.3
+pydantic_core==2.14.6
 pydantic_settings==2.2.1
 PyJWT==2.8.0
 pyparsing==3.1.2
