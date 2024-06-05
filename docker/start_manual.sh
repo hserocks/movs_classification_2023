@@ -18,7 +18,6 @@ sudo service redis-server start
 echo "Activating virtual environment..."
 source .venv/bin/activate
 
-
 # Check if PostgreSQL is running
 echo "Checking if PostgreSQL is running..."
 docker/postgres.sh &
