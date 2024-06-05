@@ -18,9 +18,6 @@ COPY . .
 
 RUN chmod a+x docker/*.sh
 
-# Run bot_new.py in the background
-RUN nohup python bot_new.py > /dev/null 2>&1 &
-
 # Install dockerize
 # ENV DOCKERIZE_VERSION v0.6.1
 # RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
@@ -31,4 +28,7 @@ RUN nohup python bot_new.py > /dev/null 2>&1 &
 # WORKDIR src
 
 #CMD celery -A src.evaluate.router:celery worker --loglevel=INFO && gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind=0.0.0.0:8000
-CMD gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind=0.0.0.0:8000
+# CMD gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind=0.0.0.0:8000
+
+# Start the bot and the FastAPI app
+CMD ["sh", "-c", "nohup python bot_new.py > /dev/null 2>&1 & exec gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind=0.0.0.0:8000"]
