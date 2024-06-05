@@ -1,0 +1,15 @@
+[33mb1a29d9[m[33m ([m[1;36mHEAD[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{0}: rebase (start): checkout origin/main
+[33m2cf7207[m[33m ([m[1;31morigin/pep8_check[m[33m, [m[1;32mpep8_check[m[33m)[m HEAD@{1}: commit: fixt bot
+[33m0e7cd73[m HEAD@{2}: checkout: moving from main to pep8_check
+[33mb1a29d9[m[33m ([m[1;36mHEAD[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{3}: commit: upd docker files
+[33m958b5a2[m HEAD@{4}: commit: add docker
+[33mda76893[m HEAD@{5}: commit: upd gitignore
+[33me4d4361[m HEAD@{6}: commit: clean-up
+[33mfe3da83[m HEAD@{7}: commit: gitignore
+[33m3c32ef1[m HEAD@{8}: commit: add celery
+[33mce123fe[m HEAD@{9}: commit: fix cookies
+[33md31e81c[m HEAD@{10}: commit: upd requirements
+[33m0184c91[m HEAD@{11}: commit: upd for fastapi
+[33m45a2611[m HEAD@{12}: commit: upd gitignore
+[33mff64b08[m HEAD@{13}: commit: upd requirements
+[33mef18dbd[m HEAD@{14}: clone: from github.com:hserocks/movs_classification_2023.git
