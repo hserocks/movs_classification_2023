@@ -1,5 +1,6 @@
 #version: "3.7"
-version: "3.11.8"
+#version: "3.11.8"
+version: "3.11"
 services:
   db:
     image: postgres:15
