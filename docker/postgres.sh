@@ -5,7 +5,8 @@ DB_HOST="db"
 DB_PORT="5432"
 DB_NAME="postgres"
 DB_USER="postgres"
-DB_PASS="postgres"
+# DB_PASS="postgres"
+DB_PASS="GWtfrb12!"
 
 echo "Waiting for PostgreSQL to become available..."
 
