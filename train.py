@@ -1,7 +1,9 @@
 from utils.resnet import prepare_data_resnet, train_resnet, test_resnet
 from utils.vit import prepare_data_vit, train_vit, test_vit
+from utils.clip import test_clip
 
 from argparse import ArgumentParser
+import json
 
 
 def main(model='vit', image_folder_path='Data_small', eval=False):
@@ -30,6 +32,15 @@ def main(model='vit', image_folder_path='Data_small', eval=False):
         else:
             print('Data prepared. Starting testing')
         return test_vit(no_of_classes, test_loader)
+    
+    elif model == 'clip':
+        print('Selected model: CLIP (zero-shot). Starting testing')
+        device, no_of_classes, train_loader, test_loader, dataloader = \
+            prepare_data_vit(image_folder_path) # CLIP uses the same approach as VIT (so it's okay)
+        # Load cat names
+        class_to_idx_path = 'class_to_idx.json'
+        return test_clip(class_to_idx_path, test_loader)
+    
     else:
         print('Invalid model name')
         return 'Invalid model name'
