@@ -187,6 +187,71 @@ def get_categories_rn(new_image_path):
     return df_string  # return df
 
 
+def get_categories_clip(new_image_path):
+    import pandas as pd
+    from PIL import Image
+    import clip
+    import json
+
+    import torch
+    from torchvision import transforms
+    import torchvision.models as models
+    import torch.nn as nn
+    import torch.nn.functional as F
+    
+    # Check if GPU is available
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"Using device: {device}")
+    
+    # Load CLIP model
+    model, preprocess = clip.load("ViT-B/32", device)
+    
+    # Load cat names
+    with open('class_to_idx.json', 'r') as f:
+        class_to_idx = json.load(f)
+
+    # Get and preprocess cat names into a format suitable for CLIP
+    cat_names = list(class_to_idx.keys())
+    categories = cat_names    
+    category_texts = clip.tokenize(categories).to(device)
+
+    # Load image
+    image_path = new_image_path  # test image path
+    image = preprocess(Image.open(image_path)).unsqueeze(0).to(device)
+
+    # Encode the image and the category texts
+    with torch.no_grad():
+        image_features = model.encode_image(image)
+        text_features = model.encode_text(category_texts)
+
+    # Compute the similarity between the image and each category
+    image_features /= image_features.norm(dim=-1, keepdim=True)
+    text_features /= text_features.norm(dim=-1, keepdim=True)
+    similarities = (100.0 * image_features @ text_features.T).softmax(dim=-1)
+
+    # Get the top 5 categories and their probabilities
+    top_num = 5
+    top_prob, top_catid = torch.topk(similarities, top_num)
+
+    # Convert to Python data types
+    top_prob = top_prob.cpu().numpy()[0]
+    top_catid = top_catid.cpu().numpy()[0]
+
+    # Map indices to class names and prepare predictions
+    predictions = []
+    for i in range(top_num):
+        predicted_class_name = categories[top_catid[i]]
+        predicted_probability = top_prob[i]
+        predictions.append({'Category ID': predicted_class_name,
+                            'Probability': predicted_probability})
+
+    df = pd.DataFrame(predictions)
+    df_string = df.to_string(index=False)
+    print(df_string)
+
+    return df_string  # return df
+
+
 def save_result_as_chart(result):
     df = pd.DataFrame(result)
     dpi = 60

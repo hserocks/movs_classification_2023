@@ -7,7 +7,7 @@ from random import randint, choice
 
 from bot_telegram_up.config_reader import config
 from utils.short_model import (get_categories_rn, get_categories_vit,
-                               save_result_as_chart)
+                               get_categories_clip, save_result_as_chart)
 from utils.gimages_dl import download_gimages, get_random_gimage
 
 from aiogram import Bot, Dispatcher, types, F
@@ -129,7 +129,9 @@ def model_keyboard():
             types.InlineKeyboardButton(text="RESNET",
                                        callback_data="model_RESNET"),
             types.InlineKeyboardButton(text="VIT",
-                                       callback_data="model_VIT")
+                                       callback_data="model_VIT"),
+            types.InlineKeyboardButton(text="CLIP(ZS)",
+                                       callback_data="model_CLIP")
         ],
         [types.InlineKeyboardButton(text="Подтвердить",
                                     callback_data="model_SELECT")]
@@ -185,6 +187,10 @@ async def callbacks_num(callback: types.CallbackQuery):
         user_value = action
         await update_num_text(callback.message, user_value)
     elif action == "VIT":
+        user_data[callback.from_user.id] = action
+        user_value = action
+        await update_num_text(callback.message, user_value)
+    elif action == "CLIP":
         user_data[callback.from_user.id] = action
         user_value = action
         await update_num_text(callback.message, user_value)
@@ -260,6 +266,41 @@ async def callbacks_num(callback: types.CallbackQuery):
             await callback.message.answer('Обратная связь',
                                           reply_markup=builder.as_markup())
 
+        # отправка картинки в нейросеть, получение ответа
+        # и передача пользователю
+        elif user_value == "CLIP":
+
+            full_answer_string = get_categories_clip(new_images[-1])
+            full_answer = string_to_df(full_answer_string)
+
+            short_answer = full_answer['Category ID'][0]
+            image_to_send = FSInputFile(save_result_as_chart(full_answer))
+
+            await callback.message.edit_text(
+                f"Я думаю, что это {str(short_answer)}",
+                parse_mode=ParseMode.HTML
+            )
+            await callback.message.answer(
+                "А вот все топ классы",
+                parse_mode=ParseMode.HTML
+            )
+
+            await callback.message.answer_photo(image_to_send)
+
+            # обратная связь от пользователя
+            builder = InlineKeyboardBuilder()
+            builder.add(types.InlineKeyboardButton(
+                text="Я прав",
+                callback_data="true_answer")
+            )
+            builder.add(types.InlineKeyboardButton(
+                text="Я не прав",
+                callback_data="false_answer")
+            )
+            await callback.message.answer('Обратная связь',
+                                          reply_markup=builder.as_markup())
+        
+        
         else:
             await callback.message.edit_text(
                 "Error",
