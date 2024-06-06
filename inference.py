@@ -1,4 +1,4 @@
-from utils.short_model import get_categories_vit, get_categories_rn
+from utils.short_model import get_categories_vit, get_categories_rn, get_categories_clip
 from utils.inference_svm_xgb import get_categories_SVM, get_categories_XGB
 from argparse import ArgumentParser
 
@@ -29,6 +29,11 @@ def main(model, path):
         print('Selected model: VIT. Starting inference')
         image = open_image(path)
         return get_categories_vit(image)
+
+    elif model == 'clip':
+        print('Selected model: CLIP (zero-shot). Starting inference')
+        image = open_image(path)
+        return get_categories_clip(image)
 
     elif model == 'resnet_svm':
         print('Selected model: ResNet50 with SVM. Starting inference')
