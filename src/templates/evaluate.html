@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Model Inference and Authentication</title>
+    <title>Model Evaluation</title>
     <style>
         .top-right-buttons {
             position: fixed; /* or 'absolute' */
@@ -31,6 +31,7 @@
             <select name="model" id="model" style="width: 150px;">
                 <option value="resnet">resnet</option>
                 <option value="vit">vit</option>
+                <option value="clip">clip</option>
             </select>
             <button type="button" onclick="Evaluate()" style="margin-left: 10px;">Evaluate</button>
             <div id="Evaluate_status"></div>
