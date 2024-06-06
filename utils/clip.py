@@ -11,13 +11,13 @@ def test_clip(class_to_idx_path, test_loader):
     with open(class_to_idx_path, 'r') as f:
         class_to_idx = json.load(f)
 
-    # Get and preprocess class names into a format suitable for CLIP
-    categories = list(class_to_idx.keys())
-    category_texts = clip.tokenize(categories).to(device)
-
     # Check if GPU is available
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
+        
+    # Get and preprocess class names into a format suitable for CLIP
+    categories = list(class_to_idx.keys())
+    category_texts = clip.tokenize(categories).to(device)
     
     # Load CLIP model
     model, preprocess = clip.load("ViT-B/32", device)
