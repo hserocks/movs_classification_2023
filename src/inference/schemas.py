@@ -9,7 +9,7 @@ from pydantic import BaseModel, validator, constr, Field
 #     model: str = 'resnet'
 #     link: str = 'https://cdn.britannica.com/71/234471-050-093F4211/shiba-inu-dog-in-the-snow.jpg'
 
-allowed_models = ['resnet', 'vit', 'resnet_svm',
+allowed_models = ['resnet', 'vit', 'resnet_svm', 'clip',
                   'vit_svm', 'resnet_xgb', 'vit_xgb']
 
 
