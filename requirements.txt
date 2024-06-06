@@ -122,3 +122,4 @@ xgboost==2.0.3
 yarl==1.9.4
 
 psycopg2
+git+https://github.com/openai/CLIP.git
