@@ -365,12 +365,20 @@ async def get_gen_image(message: Message, command: CommandObject):
 
     if command.args is None:
         await message.answer(
-            "Нет аргументов, генерируем кота"
+            "Нет аргументов, генерируем случайного кота (1 мин.)"
         )
         get_inference()
     else:
-        # NOW THE SAME, TBU!
-        get_inference()
+        try:
+            seed = int(command.args)
+            "fГенерируем кота с seed =  (1 мин.)"
+            get_inference(seed = seed)
+        except ValueError:
+            await message.answer(
+                "Неверный аргумент, генерируем случайного кота (1 мин.)"
+            )
+            get_inference()
+        
 
     generated_image = get_last_image('generated')
     image_to_send = FSInputFile(generated_image)

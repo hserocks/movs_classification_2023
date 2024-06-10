@@ -28,7 +28,7 @@ def get_gan_file(model_name):
 
 
 
-def get_inference(model_name='cats'):
+def get_inference(model_name='cats', seed = None):
     gan_path = get_gan_file(model_name)
     full_gan_path = os.path.join('/mnt/volume_lon1_01/Project/movs_classification_2023', gan_path)
     
@@ -36,7 +36,10 @@ def get_inference(model_name='cats'):
     network_url = full_gan_path
 
     # Generate a random seed
-    random_seed = random.randint(0, 10000)
+    if seed is None:
+        random_seed = random.randint(0, 10000)
+    else:
+        random_seed = seed
 
     # Path to the shell script
     script_path = "utils/gen_image.sh"
