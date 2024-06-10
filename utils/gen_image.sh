@@ -1,13 +1,14 @@
 #!/bin/bash
 
 # Check if the correct number of arguments are provided
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <network_url>"
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <network_url> <seeds>"
     exit 1
 fi
 
-# Assign the first argument to a variable
+# Assign the arguments to variables
 NETWORK_URL=$1
+SEEDS=$2
 
 # Change directory
 echo "Changing directory to /mnt/volume_lon1_01/gen/stylegan3"
@@ -20,7 +21,7 @@ conda activate stylegan3
 
 # Run the Python script
 echo "Running the Python script to generate images"
-python gen_images.py --outdir='/mnt/volume_lon1_01/Project/movs_classification_2023/generated' --trunc=1 --seeds=2 --network="$NETWORK_URL"
+python gen_images.py --outdir='/mnt/volume_lon1_01/Project/movs_classification_2023/generated' --trunc=1 --seeds="$SEEDS" --network="$NETWORK_URL"
 
 # Deactivate conda environment
 echo "Deactivating conda environment 'stylegan3'"

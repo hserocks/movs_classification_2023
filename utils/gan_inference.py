@@ -1,6 +1,7 @@
 import gdown
 import os
 import subprocess
+import random
 
 def get_gan_file(model_name):
 
@@ -27,18 +28,21 @@ def get_gan_file(model_name):
 
 
 
-def get_inference(model_name = 'cats'):
+def get_inference(model_name='cats'):
     gan_path = get_gan_file(model_name)
     full_gan_path = os.path.join('/mnt/volume_lon1_01/Project/movs_classification_2023', gan_path)
     
     # Define the network URL
     network_url = full_gan_path
 
+    # Generate a random seed
+    random_seed = random.randint(0, 10000)
+
     # Path to the shell script
     script_path = "utils/gen_image.sh"
 
-    # Call the shell script with the network URL as an argument
-    subprocess.run([script_path, network_url])
+    # Call the shell script with the network URL and random seed as arguments
+    subprocess.run([script_path, network_url, str(random_seed)])
 
 
 def get_last_image(save_folder):
