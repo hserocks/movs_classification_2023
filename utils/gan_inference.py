@@ -14,6 +14,9 @@ def get_gan_file(model_name):
     # output = os.path.join(dl_folder, gan_name)
 
     # Check if the file exists
+    if not os.path.exists(dl_folder):
+        os.makedirs(dl_folder)
+    
     if not os.path.exists(full_path):
         print(f"File not found. Downloading from Gdrive: {gan_model}")
         gdown.download(url, full_path, quiet=False)
