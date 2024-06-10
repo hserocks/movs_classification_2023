@@ -2,7 +2,7 @@ import gdown
 import os
 import subprocess
 
-def get_gan_file():
+def get_gan_file(model_name):
 
     dl_folder = 'gan_models'
     file_path = 'cats.pkl'
@@ -24,7 +24,7 @@ def get_gan_file():
 
 
 
-def get_inference(model_name):
+def get_inference(model_name = 'cats'):
     gan_path = get_gan_file(model_name)
     
     # Define the network URL
@@ -36,4 +36,6 @@ def get_inference(model_name):
     # Call the shell script with the network URL as an argument
     subprocess.run([script_path, network_url])
 
-    
+
+if __name__ == '__main__':
+    get_inference()
