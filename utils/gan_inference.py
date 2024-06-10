@@ -29,9 +29,10 @@ def get_gan_file(model_name):
 
 def get_inference(model_name = 'cats'):
     gan_path = get_gan_file(model_name)
+    full_gan_path = os.path.join('/mnt/volume_lon1_01/Project/movs_classification_2023', gan_path)
     
     # Define the network URL
-    network_url = gan_path
+    network_url = full_gan_path
 
     # Path to the shell script
     script_path = "utils/gen_image.sh"
