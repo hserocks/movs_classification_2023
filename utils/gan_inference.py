@@ -46,7 +46,7 @@ def get_last_image(save_folder):
     import os
 
     # Get all jpg images from the folder
-    images = glob.glob(os.path.join(save_folder, "*.jpg"))
+    images = glob.glob(os.path.join(save_folder, "*.png"))
     print(images)
 
     if not images:
