@@ -34,7 +34,7 @@ def get_inference(model_name = 'cats'):
     network_url = gan_path
 
     # Path to the shell script
-    script_path = "gen_image.sh"
+    script_path = "utils/gen_image.sh"
 
     # Call the shell script with the network URL as an argument
     subprocess.run([script_path, network_url])
