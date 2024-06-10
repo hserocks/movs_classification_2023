@@ -20,7 +20,7 @@ conda activate stylegan3
 
 # Run the Python script
 echo "Running the Python script to generate images"
-python gen_images.py --outdir=out --trunc=1 --seeds=2 --network="$NETWORK_URL"
+python gen_images.py --outdir='/mnt/volume_lon1_01/Project/movs_classification_2023/generated' --trunc=1 --seeds=2 --network="$NETWORK_URL"
 
 # Deactivate conda environment
 echo "Deactivating conda environment 'stylegan3'"
