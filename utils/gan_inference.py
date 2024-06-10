@@ -41,5 +41,15 @@ def get_inference(model_name = 'cats'):
     subprocess.run([script_path, network_url])
 
 
+def get_last_image(save_folder):
+    import glob
+
+    # Get last saved image from the folder
+    images = glob.glob(f"{save_folder}/*.jpg")
+    last_image = images[-1]
+
+    return last_image
+
+
 if __name__ == '__main__':
     get_inference()

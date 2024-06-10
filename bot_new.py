@@ -10,6 +10,8 @@ from utils.short_model import (get_categories_rn, get_categories_vit,
                                get_categories_clip, save_result_as_chart)
 from utils.gimages_dl import download_gimages, get_random_gimage
 
+from utils.gan_inference import get_inference, get_last_image
+
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.types import Message, FSInputFile
 from aiogram.filters import Command, CommandObject
@@ -321,6 +323,7 @@ async def false_answer(callback: types.CallbackQuery):
         "Спасибо за фидбек. Меня обновят, и я стану умнее.")
 
 
+# Хэндлер на команду /g
 @dp.message(Command('g'))
 async def analyze_random_image(message: Message, command: CommandObject):
     # Сюда будем помещать file_id отправленных файлов,
@@ -352,6 +355,31 @@ async def analyze_random_image(message: Message, command: CommandObject):
     await bot.send_photo(message.chat.id, image_to_send)
     await message.answer("Выберите модель: -",
                          reply_markup=model_keyboard())
+
+
+# Хэндлер на команду /gen
+@dp.message(Command('gen'))
+async def get_gen_image(message: Message, command: CommandObject):
+    # Сюда будем помещать file_id отправленных файлов,
+    # чтобы потом ими воспользоваться
+
+    if command.args is None:
+        await message.answer(
+            "Нет аргументов, генерируем кота"
+        )
+        get_inference()
+    else:
+        # NOW THE SAME, TBU!
+        get_inference()
+
+    generated_image = get_last_image('generated')
+    image_to_send = FSInputFile(generated_image)
+    print(generated_image)
+
+    await bot.send_photo(message.chat.id, image_to_send)
+
+
+
 
 
 def string_to_df(df_string):
