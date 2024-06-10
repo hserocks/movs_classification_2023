@@ -66,7 +66,8 @@ async def cmd_start(message: types.Message):
     await message.answer(
         'Для справки список всех '
         'команд: \n/help \n/info \n/example \n/help '
-        '\n/g [запрос] \n/g')
+        '\n/g [запрос] \n/g'
+        '\n/gen [seed] \n/gen')
     await message.answer(
         'Если лень искать картинку, можешь написать /g [запрос] - '
         'например, "/g злой тигр", я найду 20 картинок по твоему '
@@ -77,6 +78,8 @@ async def cmd_start(message: types.Message):
     await message.answer(
         'Или напиши /example, и я достану случайную картинку '
         'из своей библиотеки')
+    await message.answer(
+        'Или напиши /gen, и я сгенерирую тебе кота')
 
 
 # Хэндлер на команду /help
@@ -365,17 +368,19 @@ async def get_gen_image(message: Message, command: CommandObject):
 
     if command.args is None:
         await message.answer(
-            "Нет аргументов, генерируем случайного кота (1 мин.)"
+            "Нет аргументов, генерируем случайного кота (<1 мин.)"
         )
         get_inference()
     else:
         try:
             seed = int(command.args)
-            "fГенерируем кота с seed =  (1 мин.)"
+            await message.answer(
+            f"Генерируем кота с seed = {seed} (<1 мин.)"
+        )
             get_inference(seed = seed)
         except ValueError:
             await message.answer(
-                "Неверный аргумент, генерируем случайного кота (1 мин.)"
+                "Неверный аргумент, генерируем случайного кота (<1 мин.)"
             )
             get_inference()
         
