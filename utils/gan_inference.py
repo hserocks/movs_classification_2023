@@ -43,13 +43,25 @@ def get_inference(model_name = 'cats'):
 
 def get_last_image(save_folder):
     import glob
+    import os
 
-    # Get last saved image from the folder
-    images = glob.glob(f"{save_folder}/*.jpg")
+    # Get all jpg images from the folder
+    images = glob.glob(os.path.join(save_folder, "*.jpg"))
+    print(images)
+
+    if not images:
+        return None  # or you can raise an exception or handle it as needed
+
+    # Sort the images by creation time
+    images.sort(key=os.path.getctime)
+
+    # Return the last image
     last_image = images[-1]
 
     return last_image
 
 
 if __name__ == '__main__':
-    get_inference()
+    save_folder = 'generated'
+    # get_inference()
+    get_last_image(save_folder)
