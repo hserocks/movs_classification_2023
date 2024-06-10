@@ -11,12 +11,12 @@ def get_gan_file(model_name):
     gan_model = '1TqOqMi34XLw4_0bUmyEo-7tLfDhvGSiV'
     gan_name = 'cats.pkl'
     url = 'https://drive.google.com/uc?id=' + gan_model
-    output = os.path.join(dl_folder, gan_name)
+    # output = os.path.join(dl_folder, gan_name)
 
     # Check if the file exists
     if not os.path.exists(full_path):
         print(f"File not found. Downloading from Gdrive: {gan_model}")
-        gdown.download(url, output, quiet=False)
+        gdown.download(url, full_path, quiet=False)
     else:
         print(f"No need to download - model already exists at {full_path}")
     
