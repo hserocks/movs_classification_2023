@@ -367,10 +367,11 @@ async def get_gen_image(message: Message, command: CommandObject):
     # чтобы потом ими воспользоваться
 
     if command.args is None:
+        random_seed = randint(0, 100000)
         await message.answer(
-            "Нет аргументов, генерируем случайного кота (<1 мин.)"
+            f"Нет аргументов, генерируем случайного кота, seed = {random_seed} (<1 мин.)"
         )
-        get_inference()
+        get_inference(seed = random_seed)
     else:
         try:
             seed = int(command.args)
@@ -379,10 +380,11 @@ async def get_gen_image(message: Message, command: CommandObject):
         )
             get_inference(seed = seed)
         except ValueError:
+            random_seed = randint(0, 100000)
             await message.answer(
-                "Неверный аргумент, генерируем случайного кота (<1 мин.)"
+                f"Неверный аргумент, генерируем случайного кота, seed = {random_seed}  (<1 мин.)"
             )
-            get_inference()
+            get_inference(seed = random_seed)
         
 
     generated_image = get_last_image('generated')

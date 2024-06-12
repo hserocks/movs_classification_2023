@@ -37,7 +37,7 @@ def get_inference(model_name='cats', seed = None):
 
     # Generate a random seed
     if seed is None:
-        random_seed = random.randint(0, 10000)
+        random_seed = random.randint(0, 100000)
     else:
         random_seed = seed
 
