@@ -366,7 +366,7 @@ async def analyze_random_image(message: Message, command: CommandObject):
                          reply_markup=model_keyboard())
 
 
-# Хэндлер на команду /gen
+# Хэндлер на команду /gen (cats)
 @dp.message(Command('gen'))
 async def get_gen_image(message: Message, command: CommandObject):
     # Сюда будем помещать file_id отправленных файлов,
@@ -377,20 +377,20 @@ async def get_gen_image(message: Message, command: CommandObject):
         await message.answer(
             f"Нет аргументов, генерируем случайного кота, seed = {random_seed} (<1 мин.)"
         )
-        get_inference(seed = random_seed)
+        get_inference(seed = random_seed, model_name='cats')
     else:
         try:
             seed = int(command.args)
             await message.answer(
             f"Генерируем кота с seed = {seed} (<1 мин.)"
         )
-            get_inference(seed = seed)
+            get_inference(seed = seed, model_name='cats')
         except ValueError:
             random_seed = randint(0, 100000)
             await message.answer(
                 f"Неверный аргумент, генерируем случайного кота, seed = {random_seed}  (<1 мин.)"
             )
-            get_inference(seed = random_seed)
+            get_inference(seed = random_seed, model_name='cats')
         
 
     generated_image = get_last_image('generated')
@@ -399,6 +399,40 @@ async def get_gen_image(message: Message, command: CommandObject):
 
     await bot.send_photo(message.chat.id, image_to_send)
 
+
+
+# Хэндлер на команду /gen2 (cats_dogs)
+@dp.message(Command('gen2'))
+async def get_gen_image(message: Message, command: CommandObject):
+    # Сюда будем помещать file_id отправленных файлов,
+    # чтобы потом ими воспользоваться
+
+    if command.args is None:
+        random_seed = randint(0, 100000)
+        await message.answer(
+            f"Нет аргументов, генерируем случайного котопса, seed = {random_seed} (<1 мин.)"
+        )
+        get_inference(seed = random_seed, model_name='cats_dogs') 
+    else:
+        try:
+            seed = int(command.args)
+            await message.answer(
+            f"Генерируем котопса с seed = {seed} (<1 мин.)"
+        )
+            get_inference(seed = seed, model_name='cats_dogs') 
+        except ValueError:
+            random_seed = randint(0, 100000)
+            await message.answer(
+                f"Неверный аргумент, генерируем случайного котопса, seed = {random_seed}  (<1 мин.)"
+            )
+            get_inference(seed = random_seed, model_name='cats_dogs') 
+        
+
+    generated_image = get_last_image('generated')
+    image_to_send = FSInputFile(generated_image)
+    print(generated_image)
+
+    await bot.send_photo(message.chat.id, image_to_send)
 
 
 

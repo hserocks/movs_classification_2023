@@ -3,14 +3,22 @@ import os
 import subprocess
 import random
 
-def get_gan_file(model_name):
+def get_gan_file(model_name = 'cats'):
 
     dl_folder = 'gan_models'
-    file_path = 'cats.pkl'
+    
+    if model_name == 'cats':
+        file_path = 'cats.pkl'
+        gan_model = '1TqOqMi34XLw4_0bUmyEo-7tLfDhvGSiV'
+        gan_name = 'cats.pkl'
+    else:
+        file_path = 'cats_dogs.pkl'
+        gan_model = '1kZdyJ4LCvY7VTxy-xld6TmP2TnHSL8I8'
+        gan_name = 'cats_dogs.pkl'
+    
     full_path = os.path.join(dl_folder, file_path)
 
-    gan_model = '1TqOqMi34XLw4_0bUmyEo-7tLfDhvGSiV'
-    gan_name = 'cats.pkl'
+    
     url = 'https://drive.google.com/uc?id=' + gan_model
     # output = os.path.join(dl_folder, gan_name)
 
