@@ -5,12 +5,12 @@ import logging
 from datetime import datetime
 from random import randint, choice
 
-from utils.bot_telegram_backup.config_reader import config
-from utils.short_model import (get_categories_rn, get_categories_vit,
+from ..utils.bot_telegram_backup.config_reader import config
+from ..utils.short_model import (get_categories_rn, get_categories_vit,
                                get_categories_clip, save_result_as_chart)
-from utils.gimages_dl import download_gimages, get_random_gimage
+from ..utils.gimages_dl import download_gimages, get_random_gimage
 
-from utils.gan_inference import get_inference, get_last_image
+from ..utils.gan_inference import get_inference, get_last_image
 
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.types import Message, FSInputFile
