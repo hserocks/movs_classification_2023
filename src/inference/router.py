@@ -1,3 +1,10 @@
+import sys
+import os
+
+# Add the parent directory to the Python path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
 import os
 from pathlib import Path
 import pytz
@@ -15,7 +22,7 @@ from src.inference.schemas import InferenceCreate, InferenceGimages
 from src.auth.models import User
 from src.auth.base_config import current_user
 
-from inference import main as inference_main
+from scripts.inference import main as inference_main
 from utils.gimages_dl import download_gimages
 # from utils.gimages_dl import download_gimages, get_random_gimage
 
