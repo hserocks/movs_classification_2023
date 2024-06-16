@@ -4,4 +4,4 @@ source .venv/bin/activate
 
 # Start bot
 echo "Starting bot..."
-nohup python bot_new.py > /dev/null 2>&1 &
+nohup python scripts/bot_new.py > /dev/null 2>&1 &
