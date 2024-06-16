@@ -73,7 +73,8 @@ async def cmd_start(message: types.Message):
         'Для справки список всех '
         'команд: \n/help \n/info \n/example \n/help '
         '\n/g [запрос] \n/g'
-        '\n/gen [seed] \n/gen')
+        '\n/gen [seed] \n/gen'
+        '\n/gen2 [seed] \n/gen2')
     await message.answer(
         'Если лень искать картинку, можешь написать /g [запрос] - '
         'например, "/g злой тигр", я найду 20 картинок по твоему '
@@ -86,6 +87,8 @@ async def cmd_start(message: types.Message):
         'из своей библиотеки')
     await message.answer(
         'Или напиши /gen, и я сгенерирую тебе кота')
+    await message.answer(
+        'Или напиши /gen2, и я сгенерирую тебе котопса (экспериметально)')
 
 
 # Хэндлер на команду /help
