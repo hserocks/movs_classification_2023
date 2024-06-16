@@ -18,8 +18,8 @@ from celery import Celery
 import celery_aio_pool as aio_pool
 
 
-from train import main as train_main
-from train_svm_xgb import main as train_svm_xgb
+from movs_classification_2023.scripts.train import main as train_main
+from movs_classification_2023.scripts.train_svm_xgb import main as train_svm_xgb
 
 # import time
 # import asyncio
