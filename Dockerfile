@@ -11,8 +11,8 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # run script to download data
-COPY downloader.py .
-RUN python downloader.py --selection all
+COPY scripts/downloader.py .
+RUN python scripts/downloader.py --selection all
 
 COPY . .
 
