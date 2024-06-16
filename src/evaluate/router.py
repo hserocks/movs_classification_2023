@@ -1,3 +1,9 @@
+import sys
+import os
+
+# Add the parent directory to the Python path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import pytz
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -18,8 +24,8 @@ from celery import Celery
 import celery_aio_pool as aio_pool
 
 
-from movs_classification_2023.scripts.train import main as train_main
-from movs_classification_2023.scripts.train_svm_xgb import main as train_svm_xgb
+from scripts.train import main as train_main
+from scripts.train_svm_xgb import main as train_svm_xgb
 
 # import time
 # import asyncio
