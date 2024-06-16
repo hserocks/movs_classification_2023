@@ -73,7 +73,7 @@ def get_categories_vit(new_image_path):
     top_prob, top_catid = torch.topk(probabilities, top_num)
 
     # Load category names
-    with open('class_to_idx.json', 'r') as f:
+    with open('utils/class_to_idx.json', 'r') as f:
         class_to_idx = json.load(f)
 
     # Get class names for prediction index
@@ -126,7 +126,7 @@ def get_categories_rn(new_image_path):
     image = transform(image).unsqueeze(0)  # Add a batch dimension
 
     # Load category names
-    with open('class_to_idx.json', 'r') as f:
+    with open('utils/class_to_idx.json', 'r') as f:
         class_to_idx = json.load(f)
 
     # First, recreate the model architecture
@@ -207,7 +207,7 @@ def get_categories_clip(new_image_path):
     model, preprocess = clip.load("ViT-B/32", device)
     
     # Load cat names
-    with open('class_to_idx.json', 'r') as f:
+    with open('utils/class_to_idx.json', 'r') as f:
         class_to_idx = json.load(f)
 
     # Get and preprocess cat names into a format suitable for CLIP
