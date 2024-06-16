@@ -5,7 +5,7 @@ import logging
 from datetime import datetime
 from random import randint, choice
 
-from bot_telegram_up.config_reader import config
+from utils.bot_telegram_backup.config_reader import config
 from utils.short_model import (get_categories_rn, get_categories_vit,
                                get_categories_clip, save_result_as_chart)
 from utils.gimages_dl import download_gimages, get_random_gimage
