@@ -11,7 +11,7 @@ def get_gan_file(model_name = 'cats'):
         file_path = 'cats.pkl'
         gan_model = '1TqOqMi34XLw4_0bUmyEo-7tLfDhvGSiV'
         gan_name = 'cats.pkl'
-    else:
+    else: # cats_dogs
         file_path = 'cats_dogs.pkl'
         gan_model = '1kZdyJ4LCvY7VTxy-xld6TmP2TnHSL8I8'
         gan_name = 'cats_dogs.pkl'

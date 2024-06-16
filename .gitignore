@@ -23,3 +23,4 @@ dump.rdb
 venv
 .bot_env
 *:Zone.Identifier
+gan_models/
